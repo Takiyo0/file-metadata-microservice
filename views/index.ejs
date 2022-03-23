@@ -101,33 +101,7 @@
                 <input type="file" name="upfile" id="input" required/>
             </label>
         </div>
-        <button type="submit" class="submit-button">Shorten!</button>
+        <button type="submit" class="submit-button">Upload!</button>
     </form>
-    <p id="short_url"></p>
 </div>
-
-<script>
-    function handleSubmit(form) {
-        form.preventDefault();
-        let value = document.getElementById("input"),
-            result = document.getElementById("short_url");
-        if (!value || typeof value.value !== "string" || !value.value.trim() || !checkValidUrl(value.value)) return result.innerText = "Invalid URL was given.";
-        fetch(`/api/shorturl?url=${encodeURIComponent(value.value)}`, {
-            method: "POST"
-        }).then(x => x.json()).then(x => {
-            if (x.error || !x.short_url) return result.innerText = typeof x.error === "string" ? x.error : "Unknown error occured.";
-            const shortUrl = `${window.location.protocol}//${window.location.host}/api/shorturl/${x.short_url}`;
-            return result.innerHTML = `<a href="${shortUrl}">${shortUrl}</a>`
-        });
-    }
-
-    function checkValidUrl(url) {
-        try {
-            new URL(url);
-            return true;
-        } catch (e) {
-            return false;
-        }
-    }
-</script>
 </body>
